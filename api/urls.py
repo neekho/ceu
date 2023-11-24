@@ -30,3 +30,4 @@ urlpatterns = [
 
 ]
 
+print(f'count of routes {len(urlpatterns)}')

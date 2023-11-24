@@ -29,7 +29,7 @@ from rest_framework import permissions
 
 
 
-
+# age auto compute, and validate datetime's year
 # Class Based Views (API View, Generics)
 # Foreign Key, Authorization, and Permissions
 
@@ -81,6 +81,8 @@ def student(request, pk):
 def add_student(request):
 
     # Wont work if may foreign key of creator na yung models
+    # Will cause NOT NULL constraint failed: student_student.creator_id,
+    # cause creator id is not known: TESTED ON POSTMAN
 
     serializer = StudentSerializer(data=request.data)
 
@@ -157,7 +159,11 @@ class StudentsView(APIView):
 
         permissions.IsAuthenticatedOrReadOnly:
             When you are not authenticated, then READ/GET REQUESTS only.
-            Whem logged in or authenticated, then READ, WRITE AND DELETE REQUESTS are now available.
+            When logged in or authenticated, then READ, WRITE AND DELETE REQUESTS are now available.
+
+        
+        NOTES: Once permissions are declared, you need to somehow provide your credentials in postman
+        or simply use the browse-able api 
 
     '''
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
@@ -165,7 +171,7 @@ class StudentsView(APIView):
 
     def get(self, request):
         student = Student.objects.all()
-        print('FROM calss based view')
+        print('FROM class based view')
 
         serializer = StudentSerializer(student, many=True)
 
@@ -190,6 +196,12 @@ class StudentsView(APIView):
     
 
 class StudentDetailView(APIView):
+
+    '''
+        Working with single instances of Student
+        Detailed view, update, and delete only for DetailViews
+    
+    '''
 
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
@@ -218,9 +230,6 @@ class StudentDetailView(APIView):
             return Response({"message": "student updated"}, status=status.HTTP_202_ACCEPTED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    
-
-
     
 
     def delete(self, request, pk):

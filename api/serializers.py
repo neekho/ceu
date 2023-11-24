@@ -18,16 +18,20 @@ class UserSerializer(serializers.ModelSerializer):
 # Model Name + Serializer
 class StudentSerializer(serializers.ModelSerializer):
 
-    VALID_COURSE = ['BSIT', 'BSCS']
+    class Meta:
+        model = Student
+        fields = '__all__'
 
     creator = serializers.ReadOnlyField(source='creator.username')
+    
+    birth_date = serializers.DateField()
 
 
     def validate(self, data):
 
         existing_student = Student.objects.filter(
-            first_name=data['first_name'],
-            last_name=data['last_name']
+            first_name=data['first_name'].title(),
+            last_name=data['last_name'].title()
         ).exclude(id=self.instance.id if self.instance else None).first()
 
 
@@ -53,15 +57,16 @@ class StudentSerializer(serializers.ModelSerializer):
     
 
 
+    def validate_birth_date(self, value):
 
-    class Meta:
-        model = Student
-        fields = [
-            'creator',
-            'id',
-            'first_name',
-            'last_name',
-            'age',
-            'email',
-            'course'
-        ]
+        if value.year < 1975:
+            raise serializers.ValidationError('invalid year')
+
+        return value
+
+
+
+    
+
+
+
