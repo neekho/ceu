@@ -1,0 +1,71 @@
+24/11/23
+
+
+VIEWS:
+
+
+    FUNCTION BASED VIEWS:
+        EX: 
+            @api_view(['GET'])
+            def all_students(request):
+                  all_students = Student.objects.all()
+                  serializer = StudentSerializer(all_students, many=True)
+                  return Response(serializer.data)
+
+        ROUTING EX: 
+            path('students/', views.student_list), # list view
+            path('student/<str:pk>/', views.student), # detailed view
+
+
+
+
+    CLASS BASED VIEWS (CBV):
+
+        APIView
+        1. class StudentListView(APIView):
+                # Naming convention/standard Model + 'ListView'
+                # has the http method of get (select all), and post (add)
+
+                def get(request): .....
+
+                def post(request): ....
+
+        
+            class StudentDetailView()
+                '''
+                    Working single instances/item within our model (Student)
+                
+                '''
+                # Naming convention/standard Model + 'DetailView'
+                # This will contain our method for UPDATE, DELETE, AND DETAILED/SINGLE VIEW
+
+
+
+        2. generics
+                # access the items in generics. for functionalities
+                # generics.ListCreateAPIView, DestroyAPIView .. etc
+                class UsersView(generics.ListAPIView):
+                    queryset = User.objects.all()
+                    serializer_class = UserSerializer
+
+
+                #Working with single items in our db
+                #generics.RetrieveAPIView
+
+
+
+
+        3. viewsets
+
+
+
+
+
+FOREIGN KEY:
+
+
+
+
+
+
+AUTHORIZATION/AUTHENTICATION:

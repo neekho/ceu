@@ -136,10 +136,19 @@ def delete_student(request, pk):
 
 
 class UsersView(generics.ListAPIView):
+    '''
+        Working with multiple User instances,
+        LIST ONLY
+    
+    '''
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
 class UserDetail(generics.RetrieveAPIView):
+
+    '''
+        Single/Detailed view of users
+    '''
     queryset = User.objects.all()
     serializer_class = UserSerializer
         
@@ -196,15 +205,6 @@ class StudentsView(APIView):
     
 
 class StudentDetailView(APIView):
-
-    '''
-        Working with single instances of Student
-        Detailed view, update, and delete only for DetailViews
-    
-    '''
-
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
     def get_object(self, pk):
         try:
             return Student.objects.get(id=pk)
@@ -212,8 +212,15 @@ class StudentDetailView(APIView):
             print('not found')
             raise Http404("Student not found")
 
-
     def get(self, request, pk):
+        '''
+            this method is for getting a single student from our db
+            wherein pk is entered by the user.
+
+            if the student or object does not exists,
+            this will raise an http404      
+        
+        '''
         student = self.get_object(pk)
 
         serializer = StudentSerializer(student)
@@ -221,6 +228,7 @@ class StudentDetailView(APIView):
         return Response(serializer.data)
     
     def put(self, request, pk):
+        # Updating of student
         student = self.get_object(pk)
 
         serializer = StudentSerializer(student, data=request.data)
