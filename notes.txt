@@ -13,7 +13,7 @@ VIEWS:
                   return Response(serializer.data)
 
         ROUTING EX: 
-            path('students/', views.student_list), # list view
+            path('students/', views.all_students), # list view
             path('student/<str:pk>/', views.student), # detailed view
 
 
@@ -31,7 +31,7 @@ VIEWS:
                 def post(request): ....
 
         
-            class StudentDetailView()
+            class StudentDetailView(APIView)
                 '''
                     Working single instances/item within our model (Student)
                 
