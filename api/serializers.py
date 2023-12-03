@@ -5,17 +5,6 @@ from django.contrib.auth.models import User
 from student.models import Student
 
 
-class UserSerializer(serializers.ModelSerializer):
-
-    student = serializers.PrimaryKeyRelatedField(many=True, queryset= Student.objects.all())
-
-    class Meta:
-        model = User
-        fields = ['id', 'username', 'student']
-
-
-
-# Model Name + Serializer
 class StudentSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -27,7 +16,7 @@ class StudentSerializer(serializers.ModelSerializer):
     birth_date = serializers.DateField()
 
 
-    def validate(self, data):
+    def validate(self, data):   
 
         existing_student = Student.objects.filter(
             first_name=data['first_name'].title(),
@@ -70,3 +59,19 @@ class StudentSerializer(serializers.ModelSerializer):
 
 
 
+
+
+
+class UserSerializer(serializers.ModelSerializer):
+
+    # student = serializers.PrimaryKeyRelatedField(many=True, queryset=Student.objects.all())
+
+    student = StudentSerializer(many=True)
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'student']
+
+
+
+# Model Name + Serializer

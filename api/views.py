@@ -145,6 +145,7 @@ class UsersView(generics.ListAPIView):
     serializer_class = UserSerializer
 
 class UserDetail(generics.RetrieveAPIView):
+    
 
     '''
         Single/Detailed view of users
