@@ -19,6 +19,7 @@ from . serializers import StudentSerializer, UserSerializer
 
 # Authentication/Permissions 
 from rest_framework import permissions
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 # Nov 13/11/2023
@@ -32,6 +33,13 @@ from rest_framework import permissions
 # age auto compute, and validate datetime's year
 # Class Based Views (API View, Generics)
 # Foreign Key, Authorization, and Permissions
+
+
+
+# Dec 11, 2023
+# Give Quiz #6  - (Foreign Key, Entity Relationship)
+# Logging in FE
+# Call API to FE
 
 
 
@@ -176,7 +184,9 @@ class StudentsView(APIView):
         or simply use the browse-able api 
 
     '''
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
 
 
     def get(self, request):
@@ -247,4 +257,33 @@ class StudentDetailView(APIView):
         student.delete()
 
         return Response({"message": f"Student of {pk} was deleted."}, status=status.HTTP_204_NO_CONTENT)
+    
 
+
+
+
+
+
+
+
+
+    
+
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        # Add custom claims
+        token['username'] = user.username
+
+
+        return token
+    
+
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer

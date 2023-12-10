@@ -1,0 +1,39 @@
+{% extends 'student/base.html ' %}
+
+{% block home %}
+    {% if user.is_authenticated %}
+        <p>Welcome, {{ request.user.username }}!</p>
+        <a href="{% url 'logout' %}">Logout</a>
+        <a href="{% url 'all-students' %}">All Students</a>
+
+        {% if students %}
+            {% for student in students %}
+                <p>{{student.id}} - {{student.last_name}}, {{student.first_name}}</p>
+
+            {% endfor%}
+
+
+
+
+
+        {% endif%}
+
+
+        {% if search %}
+            <p>SINGLE VIEW</p>
+            <p>{{search.id}}</p>
+        {% endif%}
+
+
+
+
+    {% else %}
+        <a href="{% url 'login' %}">Login</a>
+
+
+
+  
+
+
+{% endif %}
+{% endblock%}
